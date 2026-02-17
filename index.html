@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanvir Ul Islam | FISO</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --glow: #00d2ff;
+            --bg: #060608;
+            --card: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+            --font-main: 'Poppins', sans-serif;
+            --font-logo: 'Orbitron', sans-serif;
+        }
+
+        /* CUSTOM SCROLLBAR */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--glow); }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box; 
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--bg);
+            color: #fff;
+            overflow-x: hidden;
+            cursor: none; /* Custom cursor used */
+        }
+
+        /* CURSOR SYSTEM */
+        #cursor {
+            width: 20px; height: 20px;
+            border: 2px solid var(--glow);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease, background 0.3s ease;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px var(--glow);
+        }
+
+        .cursor-hover {
+            transform: translate(-50%, -50%) scale(2.5) !important;
+            background: rgba(0, 210, 255, 0.1);
+        }
+
+        /* BACKGROUND CANVAS */
+        canvas {
+            position: fixed; top: 0; left: 0;
+            z-index: -1; pointer-events: none;
+        }
+
+        /* NAVIGATION */
+        nav {
+            position: fixed; width: 100%; top: 0;
+            text-align: center; padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            font-family: var(--font-logo);
+            letter-spacing: 5px;
+            color: var(--glow);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+            text-shadow: 0 0 10px var(--glow);
+        }
+
+        /* HERO SECTION */
+        #home {
+            height: 100vh;
+            display: flex;
+            justify-content: center; align-items: center;
+            flex-direction: column; text-align: center;
+            padding-top: 60px;
+        }
+
+        .profile-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .profile {
+            width: 180px; height: 180px;
+            border-radius: 50%;
+            border: 3px solid var(--glow);
+            box-shadow: 0 0 30px var(--glow);
+            animation: float 4s ease-in-out infinite;
+            object-fit: cover;
+            transition: 0.5s;
+        }
+
+        .profile:hover {
+            transform: scale(1.05) rotate(5deg);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            font-family: var(--font-logo);
+            font-size: clamp(2rem, 8vw, 3.5rem);
+            margin-top: 10px;
+        }
+
+        .nickname { color: var(--glow); font-size: 1.5rem; margin-bottom: 10px; }
+        
+        /* TYPING EFFECT WRAPPER */
+        .typing-container {
+            font-family: var(--font-logo);
+            color: #888;
+            font-size: 1rem;
+            height: 20px;
+            letter-spacing: 2px;
+        }
+
+        /* SECTION CARDS */
+        section { padding: 80px 20px; }
+
+        .card {
+            max-width: 1000px;
+            margin: auto;
+            background: var(--card);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(12px);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .card:hover {
+            border-color: var(--glow);
+            box-shadow: 0 0 30px rgba(0, 210, 255, 0.15);
+        }
+
+        h2 {
+            font-family: var(--font-logo);
+            color: var(--glow);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-left: 4px solid var(--glow);
+            padding-left: 15px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 25px;
+            border-radius: 18px;
+            border: 1px solid transparent;
+            transition: 0.3s;
+        }
+
+        .info-box:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--glow);
+            transform: translateY(-8px);
+        }
+
+        .info-box h3 {
+            color: var(--glow);
+            margin-bottom: 10px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-box i { margin-right: 12px; }
+
+        /* SOCIAL BUTTONS */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 25px;
+            border-radius: 50px;
+            background: var(--card);
+            color: #fff;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            transition: 0.3s;
+            font-weight: 600;
+        }
+
+        .social-links a:hover {
+            background: var(--glow);
+            color: #000;
+            box-shadow: 0 0 25px var(--glow);
+            transform: translateY(-5px);
+        }
+
+        /* REVEAL ON SCROLL */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px;
+            color: #555;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            section { padding: 40px 15px; }
+            body { cursor: default; }
+            #cursor { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cursor"></div>
+    <canvas id="particleCanvas"></canvas>
+
+    <nav>FISO</nav>
+
+    <!-- HOME -->
+    <section id="home">
+        <div class="profile-container">
+            <img src="profile.jpg" class="profile" alt="Tanvir Ul Islam">
+        </div>
+        <h1>TANVIR UL ISLAM</h1>
+        <div class="nickname">(FISO)</div>
+        <div class="typing-container">
+            <span id="type"></span><span class="cursor-blink">|</span>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="reveal">
+        <div class="card">
+            <h2>ABOUT_ME</h2>
+            <p style="color: #ccc; line-height: 1.8;">
+                I am a creative digital artist focused on high-quality visual content. Whether it's the rhythm of a video edit or the strategy of a game, I thrive on precision and modern aesthetics. My goal is to merge technology with creativity to build something memorable.
+            </p>
+
+            <div class="info-grid">
+                <div class="info-box">
+                    <h3><i class="fas fa-video"></i> PROFESSION</h3>
+                    <p><b>Video Editor:</b> Cinematic AMVs, professional color grading, and seamless transitions.</p>
+                </div>
+                <div class="info-box">
+                    <h3><i class="fas fa-graduation-cap"></i> EDUCATION</h3>
+                    <p>Dhaka Commerce College</p>
+                </div>
+                <div class="info-box">
+                    <h3><i class="fas fa-gamepad"></i> HOBBY</h3>
+                    <p><b>Gaming:</b> Competitive FPS & strategy gamer deeply immersed in gaming culture.</p>
+                </div>
+                <div class="info-box">
+                    <h3><i class="fas fa-map-marker-alt"></i> LOCATION</h3>
+                    <p>Faridpur, Dhaka, Bangladesh</p>
+                </div>
+                <div class="info-box">
+                    <h3><i class="fas fa-code"></i> SKILLS</h3>
+                    <p>Beat Sync, Motion Graphics, Cinematic Flow, Visual Effects.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOCIALS -->
+    <section class="reveal">
+        <div class="card" style="text-align: center;">
+            <h2>CONNECT WITH ME</h2>
+            <div class="social-links">
+                <a href="mailto:tanvirofficial105@gmail.com" class="hover-target"><i class="fas fa-envelope"></i> Email</a>
+                <a href="https://wa.me/8801770294074" class="hover-target"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                <a href="https://www.tiktok.com/@fiso_amv" class="hover-target"><i class="fab fa-tiktok"></i> TikTok</a>
+                <a href="https://www.instagram.com/fiso_vincenzo" class="hover-target"><i class="fab fa-instagram"></i> Instagram</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>© 2026 TANVIR UL ISLAM | ALL RIGHTS RESERVED</footer>
+
+    <script>
+        /* 1. PROFESSIONAL CURSOR */
+        const cursor = document.getElementById("cursor");
+        document.addEventListener("mousemove", (e) => {
+            cursor.style.left = e.clientX + "px";
+            cursor.style.top = e.clientY + "px";
+        });
+
+        document.querySelectorAll(".hover-target, a, .info-box").forEach(item => {
+            item.addEventListener("mouseenter", () => cursor.classList.add("cursor-hover"));
+            item.addEventListener("mouseleave", () => cursor.classList.remove("cursor-hover"));
+        });
+
+        /* 2. ADVANCED TYPING ANIMATION */
+        const words = ["PROFESSIONAL VIDEO EDITOR", "GAMING ENTHUSIAST", "CONTENT CREATOR", "FISO"];
+        let wordIdx = 0;
+        let charIdx = 0;
+        let isDeleting = false;
+        const typeTarget = document.getElementById("type");
+
+        function typeLoop() {
+            const currentWord = words[wordIdx];
+            if (isDeleting) {
+                typeTarget.innerText = currentWord.substring(0, charIdx - 1);
+                charIdx--;
+            } else {
+                typeTarget.innerText = currentWord.substring(0, charIdx + 1);
+                charIdx++;
+            }
+
+            let typeSpeed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIdx === currentWord.length) {
+                typeSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && charIdx === 0) {
+                isDeleting = false;
+                wordIdx = (wordIdx + 1) % words.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(typeLoop, typeSpeed);
+        }
+        typeLoop();
+
+        /* 3. INTERSECTION OBSERVER */
+        const observerOptions = { threshold: 0.2 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add("active");
+            });
+        }, observerOptions);
+
+        document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+
+        /* 4. NEURAL NETWORK PARTICLES */
+        const canvas = document.getElementById("particleCanvas");
+        const ctx = canvas.getContext("2d");
+        let particles = [];
+
+        function initParticles() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            const count = Math.floor(window.innerWidth / 15); 
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.8,
+                    vy: (Math.random() - 0.5) * 0.8,
+                    size: Math.random() * 2
+                });
+            }
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "rgba(0, 210, 255, 0.5)";
+            
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    let p2 = particles[j];
+                    let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if (dist < 100) {
+                        ctx.strokeStyle = `rgba(0, 210, 255, ${1 - dist / 100})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(drawParticles);
+        }
+
+        window.addEventListener("resize", initParticles);
+        initParticles();
+        drawParticles();
+    </script>
+</body>
+</html>
