@@ -10,11 +10,869 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 
-  <!-- FontAwesome 6 Icons -->
+  <!-- FontAwesome 6 Icons CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-  <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="style.css" />
+  <!-- ================= EMBEDDED STYLES (CSS) ================= -->
+  <style>
+    :root {
+      --bg-dark-vignette: #02060d;
+      --bg-card: rgba(6, 14, 26, 0.82);
+      --bg-plate-crimson: #630c1c;
+      --bg-plate-gradient: linear-gradient(135deg, #7c0e24 0%, #3a050e 100%);
+      
+      --liquid-cyan: #00d2ff;
+      --liquid-crimson: #ff1053;
+      --liquid-green: #00ff88;
+      --text-pure: #ffffff;
+      --text-muted: #8b9db5;
+      --border-subtle: rgba(255, 255, 255, 0.12);
+      --border-cyan: rgba(0, 210, 255, 0.4);
+
+      --font-bebas: 'Bebas Neue', Impact, sans-serif;
+      --font-rajdhani: 'Rajdhani', sans-serif;
+      --font-inter: 'Inter', sans-serif;
+    }
+
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body.game-body {
+      background-color: var(--bg-dark-vignette);
+      color: var(--text-pure);
+      font-family: var(--font-inter);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ================= LIQUID GLOW BACKGROUND ANIMATION ================= */
+    .liquid-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .liquid-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.35;
+      animation: liquidFloat 16s infinite alternate ease-in-out;
+    }
+
+    .blob-1 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #0d3882, transparent);
+      top: -10%;
+      right: -5%;
+    }
+
+    .blob-2 {
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, #830e25, transparent);
+      bottom: 5%;
+      left: -10%;
+      animation-duration: 20s;
+    }
+
+    .blob-3 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, #026b9c, transparent);
+      top: 45%;
+      left: 35%;
+      animation-duration: 14s;
+    }
+
+    @keyframes liquidFloat {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(60px, -40px) scale(1.12); }
+      100% { transform: translate(-40px, 50px) scale(0.95); }
+    }
+
+    /* Screen Vignette Overlay */
+    .screen-vignette {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at center, transparent 40%, rgba(1, 3, 7, 0.9) 95%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Corner Monogram Logo */
+    .corner-logo {
+      position: fixed;
+      top: 25px;
+      left: 35px;
+      z-index: 100;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      font-family: var(--font-bebas);
+      letter-spacing: 2px;
+    }
+
+    .logo-mark {
+      font-size: 1.8rem;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+    }
+
+    .logo-alias {
+      font-size: 1rem;
+      color: var(--liquid-crimson);
+    }
+
+    /* ================= GLOBAL FLOATING PILL NAV ================= */
+    .pill-nav-container {
+      position: fixed;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .pill-nav-container.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .pill-nav {
+      display: flex;
+      gap: 10px;
+      background: rgba(8, 17, 30, 0.88);
+      backdrop-filter: blur(14px);
+      padding: 6px 12px;
+      border-radius: 40px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .nav-pill {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-family: var(--font-rajdhani);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      padding: 6px 18px;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-pill:hover {
+      color: #fff;
+    }
+
+    .nav-pill.active {
+      background: rgba(0, 210, 255, 0.15);
+      color: #fff;
+      border: 1px solid var(--liquid-cyan);
+      box-shadow: 0 0 16px rgba(0, 210, 255, 0.4);
+    }
+
+    /* ================= SLIDE LAYOUT SYSTEM ================= */
+    .game-slide {
+      min-height: 100vh;
+      width: 100%;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 90px 20px 60px;
+    }
+
+    .slide-content-wrapper {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    /* Fade In / Fade Out Scroll Trigger Class */
+    .fade-target {
+      opacity: 0;
+      transform: translateY(35px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .fade-target.fade-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ================= SCREEN 1: HERO START SCREEN ================= */
+    .hero-slide {
+      text-align: center;
+    }
+
+    .hero-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 35px;
+    }
+
+    .hero-main-card {
+      display: flex;
+      align-items: center;
+      gap: 35px;
+    }
+
+    /* Exact Reference Crimson Curved Plate */
+    .crimson-plate {
+      width: 180px;
+      height: 190px;
+      background: var(--bg-plate-gradient);
+      border-radius: 12px 60px 60px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: -8px 0 30px rgba(124, 14, 36, 0.45);
+      position: relative;
+      transition: transform 0.3s ease;
+    }
+
+    .crimson-plate:hover {
+      transform: scale(1.03);
+    }
+
+    .avatar-cutout {
+      width: 135px;
+      height: 135px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+    }
+
+    .profile-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .crimson-plate:hover .profile-img {
+      transform: scale(1.08);
+    }
+
+    .hero-title-box {
+      text-align: left;
+    }
+
+    .bold-title {
+      font-family: var(--font-bebas);
+      font-size: 5.8rem;
+      line-height: 0.95;
+      letter-spacing: 4px;
+      color: #fff;
+      text-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+    }
+
+    .year-outline {
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.85);
+    }
+
+    .hero-subtag {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      font-family: var(--font-rajdhani);
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+
+    .square-bullet {
+      color: #fff;
+      font-size: 0.75rem;
+    }
+
+    /* Classic Start Menu Links */
+    .game-menu-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .menu-action {
+      font-family: var(--font-bebas);
+      font-size: 1.5rem;
+      letter-spacing: 3px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: all 0.25s ease;
+      position: relative;
+      display: inline-block;
+    }
+
+    .menu-action:hover {
+      color: #fff;
+      text-shadow: 0 0 14px var(--liquid-cyan);
+      transform: scale(1.08);
+    }
+
+    /* ================= SCREEN 2: PROFILE & ABOUT ME ================= */
+    .profile-split-layout {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .profile-visual-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .photo-ambient-glow {
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(0, 210, 255, 0.35) 0%, rgba(124, 14, 36, 0.25) 60%, transparent 70%);
+      filter: blur(40px);
+      z-index: 1;
+    }
+
+    .portrait-frame {
+      position: relative;
+      z-index: 2;
+      width: 260px;
+      height: 340px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+    }
+
+    .portrait-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .player-tag {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      margin-top: 18px;
+    }
+
+    .small-hello {
+      font-family: var(--font-rajdhani);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+
+    .player-name {
+      font-family: var(--font-bebas);
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+    }
+
+    .player-nickname {
+      color: var(--liquid-cyan);
+      font-family: var(--font-bebas);
+      letter-spacing: 1px;
+    }
+
+    /* Right Column Details */
+    .profile-info-col {
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+    }
+
+    .sub-heading {
+      font-family: var(--font-bebas);
+      font-size: 1.6rem;
+      letter-spacing: 2px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .bio-text {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .software-badges-grid {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .soft-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-inter);
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .soft-badge:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 15px var(--liquid-cyan);
+      border-color: var(--liquid-cyan);
+    }
+
+    .soft-badge.ps { color: #31a8ff; border-color: rgba(49, 168, 255, 0.4); }
+    .soft-badge.lr { color: #4dc2f7; border-color: rgba(77, 194, 247, 0.4); }
+    .soft-badge.pr { color: #ea77ff; border-color: rgba(234, 119, 255, 0.4); }
+    .soft-badge.cc { color: #fff; }
+    .soft-badge.gm { color: var(--liquid-crimson); }
+    .soft-badge.ios { color: #fff; font-size: 1.3rem; }
+
+    .two-col-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      padding-top: 10px;
+    }
+
+    .box-label {
+      font-family: var(--font-bebas);
+      font-size: 1.2rem;
+      letter-spacing: 1.5px;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .history-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .dot-marker {
+      color: var(--liquid-cyan);
+      font-size: 0.8rem;
+    }
+
+    .item-body strong {
+      font-size: 0.9rem;
+      color: #fff;
+    }
+
+    .item-body p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 6px 0;
+    }
+
+    .stat-pct {
+      color: var(--liquid-cyan);
+      font-weight: 700;
+    }
+
+    /* ================= SCREEN 3: HARDWARE & RECAP ================= */
+    .center-title-bar {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .bold-title-mid {
+      font-family: var(--font-bebas);
+      font-size: 3rem;
+      letter-spacing: 3px;
+    }
+
+    .badge-mini {
+      font-size: 1.2rem;
+      color: var(--liquid-crimson);
+      vertical-align: middle;
+    }
+
+    .recap-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 20px;
+    }
+
+    .bento-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .bento-card:hover {
+      border-color: var(--liquid-cyan);
+      box-shadow: 0 10px 30px rgba(0, 210, 255, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .pc-specs-card {
+      grid-row: span 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .bento-corner-tag {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      font-family: var(--font-rajdhani);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--liquid-crimson);
+      letter-spacing: 2px;
+    }
+
+    .bento-title {
+      font-family: var(--font-bebas);
+      font-size: 1.6rem;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+
+    .bento-title i {
+      color: var(--liquid-cyan);
+      margin-right: 8px;
+    }
+
+    .spec-list-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .spec-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 6px;
+      border-left: 3px solid var(--liquid-cyan);
+    }
+
+    .spec-type {
+      font-family: var(--font-rajdhani);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .spec-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .spec-badge {
+      font-size: 0.7rem;
+      background: rgba(0, 210, 255, 0.15);
+      color: var(--liquid-cyan);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .system-status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 25px;
+      font-family: var(--font-rajdhani);
+      font-size: 0.8rem;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--liquid-green);
+      box-shadow: 0 0 10px var(--liquid-green);
+    }
+
+    .phone-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .phone-chip {
+      font-family: var(--font-bebas);
+      font-size: 0.8rem;
+      letter-spacing: 1.5px;
+      background: var(--liquid-cyan);
+      color: #000;
+      display: inline-block;
+      align-self: flex-start;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .secondary-chip {
+      background: var(--liquid-crimson);
+      color: #fff;
+    }
+
+    .phone-icon {
+      font-size: 1.8rem;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .phone-model {
+      font-family: var(--font-bebas);
+      font-size: 1.4rem;
+      letter-spacing: 1.5px;
+    }
+
+    .phone-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin: 8px 0 14px;
+    }
+
+    .pill-features {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .pill-features span {
+      font-size: 0.7rem;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 3px 8px;
+      border-radius: 12px;
+      color: var(--text-muted);
+    }
+
+    .mini-media {
+      min-height: 130px;
+      background: linear-gradient(135deg, rgba(124, 14, 36, 0.35), rgba(6, 14, 26, 0.95));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .media-overlay {
+      text-align: center;
+      font-family: var(--font-bebas);
+      letter-spacing: 2px;
+      font-size: 1.1rem;
+    }
+
+    .media-icon {
+      display: block;
+      font-size: 1.6rem;
+      margin-bottom: 6px;
+      color: var(--liquid-cyan);
+    }
+
+    /* ================= SCREEN 4: CONTACT & THANK YOU ================= */
+    .contact-split-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .contact-left-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .circle-avatar-container {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      margin-bottom: 12px;
+    }
+
+    .circle-avatar-glow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--liquid-cyan), var(--liquid-crimson));
+      filter: blur(20px);
+      opacity: 0.6;
+    }
+
+    .circle-avatar-img {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #fff;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    }
+
+    .avatar-sub-caption {
+      font-family: var(--font-bebas);
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-bottom: 25px;
+    }
+
+    .social-pills-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .social-pill-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 18px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: 30px;
+      text-decoration: none;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .social-pill-btn i {
+      font-size: 1.1rem;
+      width: 20px;
+    }
+
+    .social-pill-btn.wa:hover { border-color: #25D366; box-shadow: 0 0 15px rgba(37, 211, 102, 0.4); }
+    .social-pill-btn.fb:hover { border-color: #1877F2; box-shadow: 0 0 15px rgba(24, 119, 242, 0.4); }
+    .social-pill-btn.ig:hover { border-color: #E1306C; box-shadow: 0 0 15px rgba(225, 48, 108, 0.4); }
+    .social-pill-btn.em:hover { border-color: var(--liquid-cyan); box-shadow: 0 0 15px var(--border-cyan); }
+
+    .contact-right-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .giant-thankyou {
+      font-family: var(--font-bebas);
+      font-size: 6.8rem;
+      line-height: 0.9;
+      letter-spacing: 4px;
+      color: #fff;
+      text-shadow: 0 0 35px rgba(255, 255, 255, 0.15);
+    }
+
+    .giant-year {
+      font-family: var(--font-bebas);
+      font-size: 5.2rem;
+      color: var(--liquid-crimson);
+      letter-spacing: 4px;
+      line-height: 1;
+    }
+
+    .sign-off-tag {
+      margin-top: 15px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .country-tag {
+      color: var(--liquid-cyan);
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    /* ================= RESPONSIVE ================= */
+    @media (max-width: 992px) {
+      .hero-main-card {
+        flex-direction: column;
+        text-align: center;
+      }
+      .hero-title-box {
+        text-align: center;
+      }
+      .bold-title {
+        font-size: 4.2rem;
+      }
+      .profile-split-layout {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .software-badges-grid {
+        justify-content: center;
+      }
+      .recap-grid {
+        grid-template-columns: 1fr;
+      }
+      .contact-split-layout {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .giant-thankyou {
+        font-size: 4.5rem;
+      }
+      .giant-year {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
 </head>
 <body class="game-body">
 
@@ -25,16 +883,16 @@
     <div class="liquid-blob blob-3"></div>
   </div>
 
-  <!-- CRT Vignette & Mesh Overlay -->
+  <!-- Screen Vignette Overlay -->
   <div class="screen-vignette"></div>
 
-  <!-- Floating Minimal Logo / Monogram -->
+  <!-- Corner Monogram Logo -->
   <div class="corner-logo">
     <span class="logo-mark">TI</span>
     <span class="logo-alias">FISO</span>
   </div>
 
-  <!-- Global Sticky Pill Nav (Shows on scroll / Screen 2, 3, 4) -->
+  <!-- Global Sticky Pill Nav (Reveals on Scroll) -->
   <nav class="pill-nav-container" id="globalPillNav">
     <div class="pill-nav">
       <a href="#about-screen" class="nav-pill active" data-target="about-screen">PROFILE</a>
@@ -47,7 +905,7 @@
   <section id="hero-screen" class="game-slide hero-slide">
     <div class="hero-inner fade-target">
       
-      <!-- Signature Curved Crimson/Maroon Plate from Reference -->
+      <!-- Signature Curved Crimson Plate from Reference -->
       <div class="hero-main-card">
         <div class="crimson-plate">
           <div class="avatar-cutout">
@@ -72,14 +930,13 @@
 
       <!-- Classic Game Start Menu Options -->
       <div class="game-menu-links">
-        <a href="#about-screen" class="menu-action" data-sound="select">START</a>
-        <a href="#specs-screen" class="menu-action" data-sound="select">OPTIONS & SPECS</a>
-        <a href="#contact-screen" class="menu-action" data-sound="select">EXIT / CONTACT</a>
+        <a href="#about-screen" class="menu-action">START</a>
+        <a href="#specs-screen" class="menu-action">OPTIONS & SPECS</a>
+        <a href="#contact-screen" class="menu-action">EXIT / CONTACT</a>
       </div>
 
     </div>
   </section>
-
 
   <!-- ================= SCREEN 2: PROFILE & ABOUT ME ================= -->
   <section id="about-screen" class="game-slide about-slide">
@@ -119,24 +976,12 @@
           <div class="info-block">
             <h2 class="sub-heading">CREATIVE & TECH STACK</h2>
             <div class="software-badges-grid">
-              <div class="soft-badge ps" title="Adobe Photoshop">
-                <span>Ps</span>
-              </div>
-              <div class="soft-badge lr" title="Adobe Lightroom">
-                <span>Lr</span>
-              </div>
-              <div class="soft-badge pr" title="Adobe Premiere Pro">
-                <span>Pr</span>
-              </div>
-              <div class="soft-badge cc" title="CapCut Video Editor">
-                <i class="fa-solid fa-scissors"></i>
-              </div>
-              <div class="soft-badge gm" title="Hardcore Gaming">
-                <i class="fa-solid fa-gamepad"></i>
-              </div>
-              <div class="soft-badge ios" title="iOS & Mobile Tech">
-                <i class="fa-brands fa-apple"></i>
-              </div>
+              <div class="soft-badge ps" title="Adobe Photoshop"><span>Ps</span></div>
+              <div class="soft-badge lr" title="Adobe Lightroom"><span>Lr</span></div>
+              <div class="soft-badge pr" title="Adobe Premiere Pro"><span>Pr</span></div>
+              <div class="soft-badge cc" title="CapCut Video Editor"><i class="fa-solid fa-scissors"></i></div>
+              <div class="soft-badge gm" title="Hardcore Gaming"><i class="fa-solid fa-gamepad"></i></div>
+              <div class="soft-badge ios" title="iOS & Mobile Tech"><i class="fa-brands fa-apple"></i></div>
             </div>
           </div>
 
@@ -188,7 +1033,6 @@
     </div>
   </section>
 
-
   <!-- ================= SCREEN 3: HARDWARE & RECAP SHOWCASE ================= -->
   <section id="specs-screen" class="game-slide specs-slide">
     <div class="slide-content-wrapper fade-target">
@@ -197,7 +1041,7 @@
         <h2 class="bold-title-mid">HARDWARE SPECS & RIG <span class="badge-mini">2026</span></h2>
       </div>
 
-      <!-- Bento Grid (Inspired by Screen 3 in Reference) -->
+      <!-- Bento Grid Layout -->
       <div class="recap-grid">
         
         <!-- PC Battlestation Main Card -->
@@ -260,15 +1104,15 @@
           </div>
         </div>
 
-        <!-- Creative Showcase Gallery Mini-Cards -->
-        <div class="bento-card mini-media gaming-media">
+        <!-- Mini-Cards -->
+        <div class="bento-card mini-media">
           <div class="media-overlay">
             <i class="fa-solid fa-gamepad media-icon"></i>
             <span>GAMING DOMAIN</span>
           </div>
         </div>
 
-        <div class="bento-card mini-media photo-media">
+        <div class="bento-card mini-media">
           <div class="media-overlay">
             <i class="fa-solid fa-camera-retro media-icon"></i>
             <span>PHOTO SHOTS</span>
@@ -280,14 +1124,13 @@
     </div>
   </section>
 
-
   <!-- ================= SCREEN 4: CONTACT & THANK YOU ================= -->
   <section id="contact-screen" class="game-slide contact-slide">
     <div class="slide-content-wrapper fade-target">
       
       <div class="contact-split-layout">
         
-        <!-- Left: Circular Photo & Social Links (Like Screen 4) -->
+        <!-- Left: Circular Photo & Social Links -->
         <div class="contact-left-col">
           <div class="circle-avatar-container">
             <div class="circle-avatar-glow"></div>
@@ -327,7 +1170,7 @@
           </div>
         </div>
 
-        <!-- Right: Giant "THANK YOU 2026" & Creator Signature -->
+        <!-- Right: Giant "THANK YOU 2026" -->
         <div class="contact-right-col">
           <div class="thankyou-box">
             <h1 class="giant-thankyou">THANK YOU</h1>
@@ -344,7 +1187,95 @@
     </div>
   </section>
 
-  <!-- Sound Audio Synthesis & Interaction Engine -->
-  <script src="script.js"></script>
+  <!-- ================= EMBEDDED JAVASCRIPT ENGINE ================= -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      /* 1. FADE IN & FADE OUT ON SCROLL */
+      const fadeElements = document.querySelectorAll('.fade-target');
+      const observerOptions = {
+        threshold: 0.2,
+        rootMargin: "0px 0px -40px 0px"
+      };
+
+      const fadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fade-visible');
+          } else {
+            entry.target.classList.remove('fade-visible');
+          }
+        });
+      }, observerOptions);
+
+      fadeElements.forEach(el => fadeObserver.observe(el));
+
+      /* 2. PILL NAV SCROLLSPY & VISIBILITY */
+      const globalNav = document.getElementById('globalPillNav');
+      const navPills = document.querySelectorAll('.nav-pill');
+      const sections = document.querySelectorAll('section');
+
+      window.addEventListener('scroll', () => {
+        const scrollY = window.pageYOffset;
+        
+        // Show pill navigation once past screen 1
+        if (scrollY > window.innerHeight * 0.35) {
+          globalNav.classList.add('visible');
+        } else {
+          globalNav.classList.remove('visible');
+        }
+
+        // Active pill highlighting
+        let currentActiveId = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - 200;
+          const sectionHeight = section.offsetHeight;
+          if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+            currentActiveId = section.getAttribute('id');
+          }
+        });
+
+        navPills.forEach(pill => {
+          pill.classList.remove('active');
+          if (pill.getAttribute('data-target') === currentActiveId) {
+            pill.classList.add('active');
+          }
+        });
+      });
+
+      /* 3. SYNTHESIZED UI AUDIO */
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      let audioCtx = null;
+
+      function playUiBeep(freq = 600, duration = 0.05) {
+        try {
+          if (!audioCtx) audioCtx = new AudioContext();
+          if (audioCtx.state === 'suspended') audioCtx.resume();
+
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(freq + 400, audioCtx.currentTime + duration);
+
+          gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start();
+          osc.stop(audioCtx.currentTime + duration);
+        } catch (e) {}
+      }
+
+      document.querySelectorAll('.menu-action, .nav-pill, .social-pill-btn, .soft-badge').forEach(item => {
+        item.addEventListener('mouseenter', () => playUiBeep(850, 0.04));
+        item.addEventListener('click', () => playUiBeep(450, 0.08));
+      });
+
+    });
+  </script>
 </body>
 </html>
