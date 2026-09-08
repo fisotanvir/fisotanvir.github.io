@@ -3,379 +3,348 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TANVIRUL ISLAM (FISO) // System Interface</title>
-  
-  <!-- Google Fonts: Orbitron & Rajdhani -->
+  <title>TANVIRUL ISLAM (FISO) // GAME PORTFOLIO 2026</title>
+
+  <!-- Google Fonts: Bebas Neue, Rajdhani & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+
   <!-- FontAwesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="style.css" />
 </head>
-<body class="cyber-theme">
+<body class="game-body">
 
-  <!-- Interactive Canvas Background -->
-  <canvas id="cyber-canvas"></canvas>
+  <!-- Liquid Ambient Background Glows -->
+  <div class="liquid-container">
+    <div class="liquid-blob blob-1"></div>
+    <div class="liquid-blob blob-2"></div>
+    <div class="liquid-blob blob-3"></div>
+  </div>
 
-  <!-- Cyberpunk Scanline Effect -->
-  <div class="scanlines"></div>
+  <!-- CRT Vignette & Mesh Overlay -->
+  <div class="screen-vignette"></div>
 
-  <!-- Custom Glowing Cursor -->
-  <div class="cursor-dot" id="cursor-dot"></div>
-  <div class="cursor-outline" id="cursor-outline"></div>
+  <!-- Floating Minimal Logo / Monogram -->
+  <div class="corner-logo">
+    <span class="logo-mark">TI</span>
+    <span class="logo-alias">FISO</span>
+  </div>
 
-  <!-- Top System HUD Bar -->
-  <header class="hud-header">
-    <div class="hud-left">
-      <span class="status-indicator"></span>
-      <span class="hud-text">STATUS: <strong class="neon-cyan">ONLINE</strong></span>
-      <span class="hud-divider">|</span>
-      <span class="hud-text">LOC: <strong class="neon-pink">BANGLADESH</strong></span>
+  <!-- Global Sticky Pill Nav (Shows on scroll / Screen 2, 3, 4) -->
+  <nav class="pill-nav-container" id="globalPillNav">
+    <div class="pill-nav">
+      <a href="#about-screen" class="nav-pill active" data-target="about-screen">PROFILE</a>
+      <a href="#specs-screen" class="nav-pill" data-target="specs-screen">SPECS & RIG</a>
+      <a href="#contact-screen" class="nav-pill" data-target="contact-screen">CONTACT</a>
     </div>
-    <div class="hud-right">
-      <button id="sound-toggle" class="hud-btn" title="Toggle UI Audio">
-        <i class="fa-solid fa-volume-high"></i> SFX: <span id="sound-status">ON</span>
-      </button>
-      <span class="hud-time" id="system-time">00:00:00</span>
-    </div>
-  </header>
+  </nav>
 
-  <!-- MAIN WRAPPER -->
-  <main class="main-container">
-
-    <!-- ================= HERO / GAME MENU ================= -->
-    <section id="hero" class="hero-section">
-      <div class="hero-content">
-        
-        <!-- Glowing Hologram Profile Frame -->
-        <div class="avatar-wrapper">
-          <div class="cyber-ring ring-outer"></div>
-          <div class="cyber-ring ring-mid"></div>
-          <div class="avatar-frame">
-            <!-- Fallback to stylish SVG placeholder if profile.jpg is missing -->
+  <!-- ================= SCREEN 1: HERO / GAME START MENU ================= -->
+  <section id="hero-screen" class="game-slide hero-slide">
+    <div class="hero-inner fade-target">
+      
+      <!-- Signature Curved Crimson/Maroon Plate from Reference -->
+      <div class="hero-main-card">
+        <div class="crimson-plate">
+          <div class="avatar-cutout">
             <img 
               src="profile.jpg" 
               alt="Tanvirul Islam (FISO)" 
-              class="avatar-img" 
-              onerror="this.src='https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=600&q=80'"
+              class="profile-img"
+              onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=80'"
             />
           </div>
-          <div class="avatar-badge">LVL.26</div>
         </div>
-
-        <!-- Name & Glitch Neon Title -->
-        <div class="title-wrapper">
-          <p class="tagline">// IDENTITY VERIFIED //</p>
-          <h1 class="glitch-name" data-text="TANVIRUL ISLAM">
-            TANVIRUL ISLAM <span class="alias-tag">[FISO]</span>
-          </h1>
-          <div class="typing-container">
-            <span class="prompt">&gt; role:</span>
-            <span class="typing-text" id="typewriter"></span>
-            <span class="typing-cursor">_</span>
-          </div>
-        </div>
-
-        <!-- Vertical Game Menu Navigation -->
-        <nav class="game-menu">
-          <a href="#about" class="menu-btn" data-sound="hover">
-            <span class="btn-idx">01</span>
-            <span class="btn-label">DATA PROFILE</span>
-            <span class="btn-bracket">[ABOUT]</span>
-          </a>
-          <a href="#education" class="menu-btn" data-sound="hover">
-            <span class="btn-idx">02</span>
-            <span class="btn-label">MISSION LOG</span>
-            <span class="btn-bracket">[EDUCATION]</span>
-          </a>
-          <a href="#setup" class="menu-btn" data-sound="hover">
-            <span class="btn-idx">03</span>
-            <span class="btn-label">HARDWARE SPECS</span>
-            <span class="btn-bracket">[MY RIG]</span>
-          </a>
-          <a href="#contact" class="menu-btn" data-sound="hover">
-            <span class="btn-idx">04</span>
-            <span class="btn-label">COMM LINK</span>
-            <span class="btn-bracket">[CONTACT]</span>
-          </a>
-        </nav>
-
-      </div>
-    </section>
-
-    <!-- ================= ABOUT & PASSIONS SECTION ================= -->
-    <section id="about" class="hud-section">
-      <div class="section-header">
-        <h2 class="section-title"><i class="fa-solid fa-id-card-clip"></i> DATA_PROFILE.SYS</h2>
-        <div class="section-line"></div>
-      </div>
-
-      <div class="cards-grid">
-        <!-- Identity Card -->
-        <div class="hud-card tilt-card">
-          <div class="card-glow"></div>
-          <div class="card-corner top-left"></div>
-          <div class="card-corner bottom-right"></div>
-          <h3 class="card-title"><i class="fa-solid fa-fingerprint neon-cyan"></i> BASIC DOSSIER</h3>
-          <ul class="data-list">
-            <li><span class="label">Full Name:</span> <span class="val">Tanvirul Islam</span></li>
-            <li><span class="label">Codename:</span> <span class="val neon-cyan">FISO</span></li>
-            <li><span class="label">Faith / Religion:</span> <span class="val">Islam</span></li>
-            <li><span class="label">Origin:</span> <span class="val">Bangladesh 🇧🇩</span></li>
-            <li><span class="label">Status:</span> <span class="val badge-active">Student & Creator</span></li>
-          </ul>
-        </div>
-
-        <!-- Passions Card -->
-        <div class="hud-card tilt-card">
-          <div class="card-glow"></div>
-          <div class="card-corner top-left"></div>
-          <div class="card-corner bottom-right"></div>
-          <h3 class="card-title"><i class="fa-solid fa-gamepad neon-pink"></i> PASSIONS & LOADOUT</h3>
-          <div class="perks-grid">
-            <div class="perk-box">
-              <i class="fa-solid fa-headset perk-icon"></i>
-              <h4>Hardcore Gaming</h4>
-              <p>Competitive & open-world gameplay enthusiast.</p>
-            </div>
-            <div class="perk-box">
-              <i class="fa-solid fa-camera-retro perk-icon"></i>
-              <h4>Photography</h4>
-              <p>Capturing frames, perspective, and lighting moods.</p>
-            </div>
-            <div class="perk-box">
-              <i class="fa-solid fa-wand-magic-sparkles perk-icon"></i>
-              <h4>Visual Editing</h4>
-              <p>Casual digital color grading, photo cuts & reels.</p>
-            </div>
-            <div class="perk-box">
-              <i class="fa-solid fa-mobile-screen-button perk-icon"></i>
-              <h4>Mobile Tech</h4>
-              <p>Flagship benchmarking, iOS, & smartphone hardware.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= EDUCATION / QUEST ROADMAP ================= -->
-    <section id="education" class="hud-section">
-      <div class="section-header">
-        <h2 class="section-title"><i class="fa-solid fa-route"></i> ACADEMIC_QUEST_LOG</h2>
-        <div class="section-line"></div>
-      </div>
-
-      <div class="timeline-container">
         
-        <!-- Step 1: SSC -->
-        <div class="timeline-item completed">
-          <div class="timeline-icon">
-            <i class="fa-solid fa-check"></i>
-          </div>
-          <div class="timeline-card hud-card">
-            <div class="quest-status completed-tag">[CLEARED // 2024]</div>
-            <h3 class="quest-title">Secondary School Certificate (SSC)</h3>
-            <p class="quest-place"><i class="fa-solid fa-location-dot"></i> Faridpur, Bangladesh</p>
-            <p class="quest-desc">Milestone cleared with academic discipline, establishing the foundation for technology, science, and creative exploration.</p>
+        <!-- Big Bold Title "PORTFOLIO 2026" -->
+        <div class="hero-title-box">
+          <h1 class="bold-title">PORTFOLIO <span class="year-outline">2026</span></h1>
+          <div class="hero-subtag">
+            <span class="square-bullet">■</span>
+            <span class="subtag-text">TANVIRUL ISLAM (FISO) // GAMER & VISUAL CREATOR</span>
           </div>
         </div>
-
-        <!-- Step 2: HSC -->
-        <div class="timeline-item in-progress">
-          <div class="timeline-icon pulse">
-            <i class="fa-solid fa-crosshairs"></i>
-          </div>
-          <div class="timeline-card hud-card active-border">
-            <div class="quest-status active-tag">[IN PROGRESS // BATCH 2026]</div>
-            <h3 class="quest-title">Higher Secondary Certificate (HSC)</h3>
-            <p class="quest-place"><i class="fa-solid fa-building-columns"></i> Dhaka Commerce College</p>
-            <p class="quest-desc">Currently pursuing HSC (Batch 2026) at one of Dhaka's premier institutions, focusing on future growth, digital mastery, and tech skills.</p>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ================= TECH RIG & HARDWARE ================= -->
-    <section id="setup" class="hud-section">
-      <div class="section-header">
-        <h2 class="section-title"><i class="fa-solid fa-microchip"></i> HARDWARE_SPECIFICATIONS</h2>
-        <div class="section-line"></div>
       </div>
 
-      <div class="rig-layout">
-        
-        <!-- PC Rig HUD -->
-        <div class="hud-card rig-card tilt-card">
-          <div class="rig-header">
-            <span class="terminal-dot"></span>
-            <span class="terminal-dot"></span>
-            <span class="terminal-dot"></span>
-            <span class="rig-title-bar"><i class="fa-solid fa-desktop"></i> BATTLESTATION RIG</span>
-          </div>
-
-          <div class="specs-table">
-            <div class="spec-row">
-              <div class="spec-label"><i class="fa-solid fa-brain"></i> PROCESSOR (CPU)</div>
-              <div class="spec-value">AMD Ryzen 5 5500 <span class="spec-pill">6C / 12T</span></div>
-            </div>
-            <div class="spec-row">
-              <div class="spec-label"><i class="fa-solid fa-vr-cardboard"></i> GRAPHICS (GPU)</div>
-              <div class="spec-value">AMD Radeon RX 580 <span class="spec-pill">GDDR5</span></div>
-            </div>
-            <div class="spec-row">
-              <div class="spec-label"><i class="fa-solid fa-memory"></i> MEMORY (RAM)</div>
-              <div class="spec-value">16 GB DDR4 <span class="spec-pill">3200 MHz</span></div>
-            </div>
-            <div class="spec-row">
-              <div class="spec-label"><i class="fa-solid fa-hard-drive"></i> STORAGE</div>
-              <div class="spec-value">700GB+ High-Speed SSD / HDD</div>
-            </div>
-          </div>
-
-          <div class="system-benchmark">
-            <div class="benchmark-info">
-              <span>SYSTEM PERFORMANCE LOAD</span>
-              <span class="neon-cyan">OPTIMAL</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill" style="width: 88%;"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Mobile Arsenal -->
-        <div class="hud-card rig-card tilt-card">
-          <div class="rig-header">
-            <span class="terminal-dot"></span>
-            <span class="terminal-dot"></span>
-            <span class="terminal-dot"></span>
-            <span class="rig-title-bar"><i class="fa-solid fa-mobile-retro"></i> MOBILE ARSENAL</span>
-          </div>
-
-          <div class="mobile-grid">
-            
-            <!-- Primary Device -->
-            <div class="device-card primary-dev">
-              <div class="device-badge">PRIMARY UNIT</div>
-              <div class="device-icon">
-                <i class="fa-brands fa-apple"></i>
-              </div>
-              <h4 class="device-name">iPhone 12 Pro Max</h4>
-              <p class="device-role">Pro Camera & Main Daily Driver</p>
-              <ul class="device-features">
-                <li><i class="fa-solid fa-check-circle"></i> Flagship Triple-Lens System</li>
-                <li><i class="fa-solid fa-check-circle"></i> LiDAR Scanner for Photography</li>
-                <li><i class="fa-solid fa-check-circle"></i> High-Bitrate Video Capture</li>
-              </ul>
-            </div>
-
-            <!-- Secondary Device -->
-            <div class="device-card secondary-dev">
-              <div class="device-badge secondary-badge">SECONDARY UNIT</div>
-              <div class="device-icon">
-                <i class="fa-brands fa-apple"></i>
-              </div>
-              <h4 class="device-name">iPhone 11</h4>
-              <p class="device-role">Backup Comm & Field Testing</p>
-              <ul class="device-features">
-                <li><i class="fa-solid fa-check-circle"></i> Reliable Bionic Power</li>
-                <li><i class="fa-solid fa-check-circle"></i> Dual Ultra-Wide System</li>
-                <li><i class="fa-solid fa-check-circle"></i> Continuous Battery Backup</li>
-              </ul>
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ================= CONTACT / COMM LINK ================= -->
-    <section id="contact" class="hud-section">
-      <div class="section-header">
-        <h2 class="section-title"><i class="fa-solid fa-satellite-dish"></i> COMM_LINK_HUB</h2>
-        <div class="section-line"></div>
+      <!-- Classic Game Start Menu Options -->
+      <div class="game-menu-links">
+        <a href="#about-screen" class="menu-action" data-sound="select">START</a>
+        <a href="#specs-screen" class="menu-action" data-sound="select">OPTIONS & SPECS</a>
+        <a href="#contact-screen" class="menu-action" data-sound="select">EXIT / CONTACT</a>
       </div>
 
-      <div class="contact-box hud-card">
-        <p class="contact-subtitle">Transmit your message directly into the terminal or reach through social frequencies:</p>
-
-        <div class="social-links-grid">
-          
-          <!-- WhatsApp Direct -->
-          <a href="https://wa.me/8801770294074" target="_blank" rel="noopener noreferrer" class="social-tile whatsapp">
-            <div class="social-icon-box">
-              <i class="fa-brands fa-whatsapp"></i>
-            </div>
-            <div class="social-info">
-              <span class="social-name">WhatsApp</span>
-              <span class="social-detail">+880 1770-294074</span>
-            </div>
-            <i class="fa-solid fa-arrow-up-right-from-square external-link"></i>
-          </a>
-
-          <!-- Facebook -->
-          <a href="https://www.facebook.com/share/1F9ioS5Suw/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="social-tile facebook">
-            <div class="social-icon-box">
-              <i class="fa-brands fa-facebook-f"></i>
-            </div>
-            <div class="social-info">
-              <span class="social-name">Facebook</span>
-              <span class="social-detail">Tanvirul Islam</span>
-            </div>
-            <i class="fa-solid fa-arrow-up-right-from-square external-link"></i>
-          </a>
-
-          <!-- Instagram -->
-          <a href="https://www.instagram.com/07_fiso?stkn=eTV0aGI1ZWRmcGc5" target="_blank" rel="noopener noreferrer" class="social-tile instagram">
-            <div class="social-icon-box">
-              <i class="fa-brands fa-instagram"></i>
-            </div>
-            <div class="social-info">
-              <span class="social-name">Instagram</span>
-              <span class="social-detail">@07_fiso</span>
-            </div>
-            <i class="fa-solid fa-arrow-up-right-from-square external-link"></i>
-          </a>
-
-          <!-- Direct Email -->
-          <a href="mailto:tanvirofficial105@gmail.com" class="social-tile email">
-            <div class="social-icon-box">
-              <i class="fa-solid fa-envelope"></i>
-            </div>
-            <div class="social-info">
-              <span class="social-name">Email Terminal</span>
-              <span class="social-detail">tanvirofficial105@gmail.com</span>
-            </div>
-            <i class="fa-solid fa-arrow-up-right-from-square external-link"></i>
-          </a>
-
-        </div>
-
-        <div class="quick-ping">
-          <span class="ping-label">DIRECT FREQUENCY:</span>
-          <code class="ping-code" id="email-copy" title="Click to copy">tanvirofficial105@gmail.com</code>
-          <span id="copy-tooltip" class="copy-alert">COPIED!</span>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Cyber Footer -->
-  <footer class="cyber-footer">
-    <div class="footer-content">
-      <p>© 2026 <strong>TANVIRUL ISLAM (FISO)</strong>. ALL RIGHTS RESERVED.</p>
-      <p class="sys-build">SYSTEM_VERSION: v4.2.6 // CYBER_UI_ENGINE</p>
     </div>
-  </footer>
+  </section>
 
-  <!-- Script -->
+
+  <!-- ================= SCREEN 2: PROFILE & ABOUT ME ================= -->
+  <section id="about-screen" class="game-slide about-slide">
+    <div class="slide-content-wrapper fade-target">
+      
+      <div class="profile-split-layout">
+        
+        <!-- Left Column: Portrait with Liquid Backlight -->
+        <div class="profile-visual-col">
+          <div class="photo-ambient-glow"></div>
+          <div class="portrait-frame">
+            <img 
+              src="profile.jpg" 
+              alt="Tanvirul Islam" 
+              class="portrait-img"
+              onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=700&q=80'"
+            />
+          </div>
+          <div class="player-tag">
+            <span class="small-hello">HELLO, I AM</span>
+            <h3 class="player-name">TANVIRUL ISLAM</h3>
+            <span class="player-nickname">[ FISO ]</span>
+          </div>
+        </div>
+
+        <!-- Right Column: Details, Skills & Timeline -->
+        <div class="profile-info-col">
+          
+          <div class="info-block">
+            <h2 class="sub-heading">ABOUT ME</h2>
+            <p class="bio-text">
+              Assalamu Alaikum. I am <strong>Tanvirul Islam (FISO)</strong> from Bangladesh. I am a passionate gamer, mobile tech explorer, and visual creator. Dedicated to high-standard aesthetics, casual photo & video grading, and exploring high-performance hardware setups.
+            </p>
+          </div>
+
+          <!-- Software & Creative Skills -->
+          <div class="info-block">
+            <h2 class="sub-heading">CREATIVE & TECH STACK</h2>
+            <div class="software-badges-grid">
+              <div class="soft-badge ps" title="Adobe Photoshop">
+                <span>Ps</span>
+              </div>
+              <div class="soft-badge lr" title="Adobe Lightroom">
+                <span>Lr</span>
+              </div>
+              <div class="soft-badge pr" title="Adobe Premiere Pro">
+                <span>Pr</span>
+              </div>
+              <div class="soft-badge cc" title="CapCut Video Editor">
+                <i class="fa-solid fa-scissors"></i>
+              </div>
+              <div class="soft-badge gm" title="Hardcore Gaming">
+                <i class="fa-solid fa-gamepad"></i>
+              </div>
+              <div class="soft-badge ios" title="iOS & Mobile Tech">
+                <i class="fa-brands fa-apple"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Two-column Education & Passions -->
+          <div class="two-col-details">
+            <div class="detail-box">
+              <h4 class="box-label">EDUCATION</h4>
+              <div class="history-item">
+                <span class="dot-marker">●</span>
+                <div class="item-body">
+                  <strong>HSC BATCH 2026</strong>
+                  <p>Dhaka Commerce College (Present)</p>
+                </div>
+              </div>
+              <div class="history-item">
+                <span class="dot-marker">●</span>
+                <div class="item-body">
+                  <strong>SSC BATCH 2024</strong>
+                  <p>Faridpur, Bangladesh</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-box">
+              <h4 class="box-label">CORE PASSIONS</h4>
+              <div class="stat-row">
+                <span>Competitive & Story Gaming</span>
+                <span class="stat-pct">99%</span>
+              </div>
+              <div class="stat-row">
+                <span>Visual Photography & Frames</span>
+                <span class="stat-pct">92%</span>
+              </div>
+              <div class="stat-row">
+                <span>Casual Photo & Video Editing</span>
+                <span class="stat-pct">88%</span>
+              </div>
+              <div class="stat-row">
+                <span>Smartphone Hardware & Benchmarks</span>
+                <span class="stat-pct">95%</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ================= SCREEN 3: HARDWARE & RECAP SHOWCASE ================= -->
+  <section id="specs-screen" class="game-slide specs-slide">
+    <div class="slide-content-wrapper fade-target">
+      
+      <div class="center-title-bar">
+        <h2 class="bold-title-mid">HARDWARE SPECS & RIG <span class="badge-mini">2026</span></h2>
+      </div>
+
+      <!-- Bento Grid (Inspired by Screen 3 in Reference) -->
+      <div class="recap-grid">
+        
+        <!-- PC Battlestation Main Card -->
+        <div class="bento-card pc-specs-card">
+          <div class="bento-corner-tag">BATTLE RIG</div>
+          <h3 class="bento-title"><i class="fa-solid fa-desktop"></i> DESKTOP POWERHOUSE</h3>
+          
+          <div class="spec-list-wrapper">
+            <div class="spec-item">
+              <span class="spec-type">CPU</span>
+              <span class="spec-name">AMD Ryzen 5 5500</span>
+              <span class="spec-badge">6C / 12T</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-type">GPU</span>
+              <span class="spec-name">AMD Radeon RX 580</span>
+              <span class="spec-badge">8GB VRAM</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-type">RAM</span>
+              <span class="spec-name">16 GB DDR4</span>
+              <span class="spec-badge">3200 MHz</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-type">DRIVE</span>
+              <span class="spec-name">700 GB+ Ultra Storage</span>
+              <span class="spec-badge">SSD + HDD</span>
+            </div>
+          </div>
+
+          <div class="system-status-indicator">
+            <span class="live-dot"></span>
+            <span>SYSTEM STATE: OPTIMIZED & OVERCLOCKED</span>
+          </div>
+        </div>
+
+        <!-- Phone 1: iPhone 12 Pro Max -->
+        <div class="bento-card phone-card primary-phone">
+          <div class="phone-chip">PRIMARY UNIT</div>
+          <div class="phone-icon"><i class="fa-brands fa-apple"></i></div>
+          <h4 class="phone-model">iPhone 12 Pro Max</h4>
+          <p class="phone-desc">Flagship Triple-Camera Array & LiDAR Sensor for pro-grade mobile photography and 4K HDR captures.</p>
+          <div class="pill-features">
+            <span>LiDAR</span>
+            <span>ProRAW</span>
+            <span>OLED</span>
+          </div>
+        </div>
+
+        <!-- Phone 2: iPhone 11 -->
+        <div class="bento-card phone-card secondary-phone">
+          <div class="phone-chip secondary-chip">SECONDARY UNIT</div>
+          <div class="phone-icon"><i class="fa-brands fa-apple"></i></div>
+          <h4 class="phone-model">iPhone 11</h4>
+          <p class="phone-desc">Dual Ultra-Wide shooter and high efficiency daily driver for portable workflow, communications, and social sync.</p>
+          <div class="pill-features">
+            <span>Night Mode</span>
+            <span>Bionic A13</span>
+            <span>Liquid Retina</span>
+          </div>
+        </div>
+
+        <!-- Creative Showcase Gallery Mini-Cards -->
+        <div class="bento-card mini-media gaming-media">
+          <div class="media-overlay">
+            <i class="fa-solid fa-gamepad media-icon"></i>
+            <span>GAMING DOMAIN</span>
+          </div>
+        </div>
+
+        <div class="bento-card mini-media photo-media">
+          <div class="media-overlay">
+            <i class="fa-solid fa-camera-retro media-icon"></i>
+            <span>PHOTO SHOTS</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ================= SCREEN 4: CONTACT & THANK YOU ================= -->
+  <section id="contact-screen" class="game-slide contact-slide">
+    <div class="slide-content-wrapper fade-target">
+      
+      <div class="contact-split-layout">
+        
+        <!-- Left: Circular Photo & Social Links (Like Screen 4) -->
+        <div class="contact-left-col">
+          <div class="circle-avatar-container">
+            <div class="circle-avatar-glow"></div>
+            <img 
+              src="profile.jpg" 
+              alt="Tanvirul Islam" 
+              class="circle-avatar-img"
+              onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=80'"
+            />
+          </div>
+          <span class="avatar-sub-caption">TANVIRUL ISLAM [FISO]</span>
+
+          <div class="social-pills-list">
+            <!-- WhatsApp -->
+            <a href="https://wa.me/8801770294074" target="_blank" rel="noopener noreferrer" class="social-pill-btn wa">
+              <i class="fa-brands fa-whatsapp"></i>
+              <span>+880 1770-294074</span>
+            </a>
+
+            <!-- Facebook -->
+            <a href="https://www.facebook.com/share/1F9ioS5Suw/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="social-pill-btn fb">
+              <i class="fa-brands fa-facebook-f"></i>
+              <span>Tanvirul Islam</span>
+            </a>
+
+            <!-- Instagram -->
+            <a href="https://www.instagram.com/07_fiso?stkn=eTV0aGI1ZWRmcGc5" target="_blank" rel="noopener noreferrer" class="social-pill-btn ig">
+              <i class="fa-brands fa-instagram"></i>
+              <span>@07_fiso</span>
+            </a>
+
+            <!-- Direct Email -->
+            <a href="mailto:tanvirofficial105@gmail.com" class="social-pill-btn em">
+              <i class="fa-solid fa-envelope"></i>
+              <span>tanvirofficial105@gmail.com</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Giant "THANK YOU 2026" & Creator Signature -->
+        <div class="contact-right-col">
+          <div class="thankyou-box">
+            <h1 class="giant-thankyou">THANK YOU</h1>
+            <h2 class="giant-year">2026</h2>
+            <div class="sign-off-tag">
+              <p>Designed with sports game UI vibe & liquid glow aesthetics.</p>
+              <p class="country-tag"><i class="fa-solid fa-location-dot"></i> Dhaka, Bangladesh 🇧🇩</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Sound Audio Synthesis & Interaction Engine -->
   <script src="script.js"></script>
 </body>
 </html>
