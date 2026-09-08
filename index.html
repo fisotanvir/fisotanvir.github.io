@@ -1,425 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tanvir Ul Islam | FISO</title>
-
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <style>
-        :root {
-            --glow: #00d2ff;
-            --bg: #060608;
-            --card: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.1);
-            --font-main: 'Poppins', sans-serif;
-            --font-logo: 'Orbitron', sans-serif;
-        }
-
-        /* CUSTOM SCROLLBAR */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--glow); }
-
-        * {
-            margin: 0; padding: 0; box-sizing: border-box; 
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: var(--font-main);
-            background: var(--bg);
-            color: #fff;
-            overflow-x: hidden;
-            cursor: none; /* Custom cursor used */
-        }
-
-        /* CURSOR SYSTEM */
-        #cursor {
-            width: 20px; height: 20px;
-            border: 2px solid var(--glow);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease, background 0.3s ease;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 15px var(--glow);
-        }
-
-        .cursor-hover {
-            transform: translate(-50%, -50%) scale(2.5) !important;
-            background: rgba(0, 210, 255, 0.1);
-        }
-
-        /* BACKGROUND CANVAS */
-        canvas {
-            position: fixed; top: 0; left: 0;
-            z-index: -1; pointer-events: none;
-        }
-
-        /* NAVIGATION */
-        nav {
-            position: fixed; width: 100%; top: 0;
-            text-align: center; padding: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(15px);
-            font-family: var(--font-logo);
-            letter-spacing: 5px;
-            color: var(--glow);
-            z-index: 1000;
-            border-bottom: 1px solid var(--border);
-            text-shadow: 0 0 10px var(--glow);
-        }
-
-        /* HERO SECTION */
-        #home {
-            height: 100vh;
-            display: flex;
-            justify-content: center; align-items: center;
-            flex-direction: column; text-align: center;
-            padding-top: 60px;
-        }
-
-        .profile-container {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .profile {
-            width: 180px; height: 180px;
-            border-radius: 50%;
-            border: 3px solid var(--glow);
-            box-shadow: 0 0 30px var(--glow);
-            animation: float 4s ease-in-out infinite;
-            object-fit: cover;
-            transition: 0.5s;
-        }
-
-        .profile:hover {
-            transform: scale(1.05) rotate(5deg);
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        h1 {
-            font-family: var(--font-logo);
-            font-size: clamp(2rem, 8vw, 3.5rem);
-            margin-top: 10px;
-        }
-
-        .nickname { color: var(--glow); font-size: 1.5rem; margin-bottom: 10px; }
-        
-        /* TYPING EFFECT WRAPPER */
-        .typing-container {
-            font-family: var(--font-logo);
-            color: #888;
-            font-size: 1rem;
-            height: 20px;
-            letter-spacing: 2px;
-        }
-
-        /* SECTION CARDS */
-        section { padding: 80px 20px; }
-
-        .card {
-            max-width: 1000px;
-            margin: auto;
-            background: var(--card);
-            padding: 40px;
-            border-radius: 24px;
-            border: 1px solid var(--border);
-            backdrop-filter: blur(12px);
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .card:hover {
-            border-color: var(--glow);
-            box-shadow: 0 0 30px rgba(0, 210, 255, 0.15);
-        }
-
-        h2 {
-            font-family: var(--font-logo);
-            color: var(--glow);
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            border-left: 4px solid var(--glow);
-            padding-left: 15px;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .info-box {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 25px;
-            border-radius: 18px;
-            border: 1px solid transparent;
-            transition: 0.3s;
-        }
-
-        .info-box:hover {
-            background: rgba(255, 255, 255, 0.07);
-            border-color: var(--glow);
-            transform: translateY(-8px);
-        }
-
-        .info-box h3 {
-            color: var(--glow);
-            margin-bottom: 10px;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .info-box i { margin-right: 12px; }
-
-        /* SOCIAL BUTTONS */
-        .social-links {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .social-links a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 15px 25px;
-            border-radius: 50px;
-            background: var(--card);
-            color: #fff;
-            text-decoration: none;
-            border: 1px solid var(--border);
-            transition: 0.3s;
-            font-weight: 600;
-        }
-
-        .social-links a:hover {
-            background: var(--glow);
-            color: #000;
-            box-shadow: 0 0 25px var(--glow);
-            transform: translateY(-5px);
-        }
-
-        /* REVEAL ON SCROLL */
-        .reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s ease-out;
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        footer {
-            text-align: center;
-            padding: 60px;
-            color: #555;
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-        }
-
-        @media (max-width: 768px) {
-            h1 { font-size: 2.2rem; }
-            section { padding: 40px 15px; }
-            body { cursor: default; }
-            #cursor { display: none; }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TANVIRUL ISLAM (FISO) // OPERATIVE PROFILE</title>
+  <meta name="description" content="Personal Cyberpunk Portfolio of Tanvirul Islam (FISO) - Gamer, Tech Enthusiast, Visual Artist" />
+  
+  <!-- Google Fonts: Orbitron (Sci-Fi Headings) & Rajdhani (Cyberpunk UI Text) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-    <div id="cursor"></div>
-    <canvas id="particleCanvas"></canvas>
+  <!-- Background Particle Canvas & Scanlines Overlay -->
+  <canvas id="bg-canvas"></canvas>
+  <div class="cyber-scanlines"></div>
 
-    <nav>FISO</nav>
+  <!-- Custom Glowing Cursor -->
+  <div class="cursor-dot" id="cursor-dot"></div>
+  <div class="cursor-ring" id="cursor-ring"></div>
 
-    <!-- HOME -->
-    <section id="home">
-        <div class="profile-container">
-            <img src="profile.jpg" class="profile" alt="Tanvir Ul Islam">
+  <!-- Top Cyberpunk HUD Status Bar -->
+  <header class="top-hud">
+    <div class="hud-left">
+      <span class="hud-tag"><i class="fa-solid fa-terminal"></i> SYS:ONLINE</span>
+      <span class="hud-tag"><i class="fa-solid fa-satellite-dish"></i> LOC: BANGLADESH</span>
+    </div>
+    <div class="hud-center">
+      <span class="hud-glitch-text" data-text="SYSTEM: FISO_OS v2.6">SYSTEM: FISO_OS v2.6</span>
+    </div>
+    <div class="hud-right">
+      <span class="hud-tag"><i class="fa-solid fa-microchip"></i> FPS: <span id="hud-fps">60</span></span>
+      <span class="hud-tag"><i class="fa-solid fa-shield-halved"></i> SEC: ENCRYPTED</span>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION (GAME MAIN MENU) ==================== -->
+  <section id="hero" class="hero-section">
+    <div class="hero-container">
+      
+      <!-- Glowing HUD Avatar -->
+      <div class="avatar-hud-wrapper">
+        <div class="hud-circle-ring ring-outer"></div>
+        <div class="hud-circle-ring ring-middle"></div>
+        <div class="hud-circle-ring ring-inner"></div>
+        <div class="avatar-frame">
+          <img src="profile.jpg" alt="Tanvirul Islam (FISO)" onerror="this.src='https://images.unsplash.com/photo-1566492031773-4f4e44671857?auto=format&fit=crop&w=400&q=80'">
         </div>
-        <h1>TANVIR UL ISLAM</h1>
-        <div class="nickname">(FISO)</div>
-        <div class="typing-container">
-            <span id="type"></span><span class="cursor-blink">|</span>
+        <span class="rank-badge">RANK: LVL 2026</span>
+      </div>
+
+      <!-- Identity & Typing Header -->
+      <div class="hero-identity">
+        <p class="cyber-sub-badge">// OPERATIVE CODENAME: FISO</p>
+        <h1 class="glitch-title" data-text="TANVIRUL ISLAM">TANVIRUL ISLAM</h1>
+        <h2 class="nickname-glow">&lt; F I S O &gt;</h2>
+        
+        <div class="typing-box">
+          <span class="typing-prefix">&gt; PROFILE_ROLE:</span>
+          <span class="typed-text" id="typed-text"></span><span class="cursor-blink">|</span>
         </div>
-    </section>
+      </div>
 
-    <!-- ABOUT -->
-    <section class="reveal">
-        <div class="card">
-            <h2>ABOUT_ME</h2>
-            <p style="color: #ccc; line-height: 1.8;">
-                I am a creative digital artist focused on high-quality visual content. Whether it's the rhythm of a video edit or the strategy of a game, I thrive on precision and modern aesthetics. My goal is to merge technology with creativity to build something memorable.
-            </p>
+      <!-- Vertical Video Game Menu Navigation -->
+      <nav class="game-menu">
+        <a href="#about" class="game-menu-btn" data-sound="hover">
+          <span class="btn-index">01</span>
+          <span class="btn-text">INITIALIZE / START</span>
+          <span class="btn-arrow"><i class="fa-solid fa-angles-right"></i></span>
+        </a>
+        <a href="#rig" class="game-menu-btn" data-sound="hover">
+          <span class="btn-index">02</span>
+          <span class="btn-text">SETUP / RIG SPECS</span>
+          <span class="btn-arrow"><i class="fa-solid fa-angles-right"></i></span>
+        </a>
+        <a href="#about" class="game-menu-btn" data-sound="hover">
+          <span class="btn-index">03</span>
+          <span class="btn-text">PLAYER INTEL / ABOUT</span>
+          <span class="btn-arrow"><i class="fa-solid fa-angles-right"></i></span>
+        </a>
+        <a href="#contact" class="game-menu-btn" data-sound="hover">
+          <span class="btn-index">04</span>
+          <span class="btn-text">COMMS LINK / CONTACT</span>
+          <span class="btn-arrow"><i class="fa-solid fa-angles-right"></i></span>
+        </a>
+      </nav>
 
-            <div class="info-grid">
-                <div class="info-box">
-                    <h3><i class="fas fa-video"></i> PROFESSION</h3>
-                    <p><b>Video Editor:</b> Cinematic AMVs, professional color grading, and seamless transitions.</p>
-                </div>
-                <div class="info-box">
-                    <h3><i class="fas fa-graduation-cap"></i> EDUCATION</h3>
-                    <p>Dhaka Commerce College</p>
-                </div>
-                <div class="info-box">
-                    <h3><i class="fas fa-gamepad"></i> HOBBY</h3>
-                    <p><b>Gaming:</b> Competitive FPS & strategy gamer deeply immersed in gaming culture.</p>
-                </div>
-                <div class="info-box">
-                    <h3><i class="fas fa-map-marker-alt"></i> LOCATION</h3>
-                    <p>Faridpur, Dhaka, Bangladesh</p>
-                </div>
-                <div class="info-box">
-                    <h3><i class="fas fa-code"></i> SKILLS</h3>
-                    <p>Beat Sync, Motion Graphics, Cinematic Flow, Visual Effects.</p>
-                </div>
+    </div>
+    
+    <a href="#about" class="scroll-down-hint">
+      <span>SCROLL DOWN</span>
+      <i class="fa-solid fa-chevron-down"></i>
+    </a>
+  </section>
+
+  <!-- ==================== ABOUT & EDUCATION SECTION ==================== -->
+  <section id="about" class="section-container">
+    <div class="section-header">
+      <span class="sec-subtitle">// 01: DATABASE</span>
+      <h2 class="sec-title">PLAYER INTEL &amp; ROADMAP</h2>
+      <div class="cyber-line"></div>
+    </div>
+
+    <div class="cards-grid">
+      
+      <!-- Bio Dossier Card -->
+      <div class="cyber-card tilt-card">
+        <div class="card-corner tl"></div><div class="card-corner tr"></div>
+        <div class="card-corner bl"></div><div class="card-corner br"></div>
+        <div class="card-header">
+          <i class="fa-solid fa-id-card card-icon"></i>
+          <h3>IDENTITY DOSSIER</h3>
+        </div>
+        <ul class="dossier-list">
+          <li><strong>FULL NAME:</strong> <span>Tanvirul Islam</span></li>
+          <li><strong>CALLSIGN:</strong> <span>FISO</span></li>
+          <li><strong>FAITH:</strong> <span>Islam <i class="fa-solid fa-moon text-cyan"></i></span></li>
+          <li><strong>HOMELAND:</strong> <span>Bangladesh <i class="fa-solid fa-location-dot text-magenta"></i></span></li>
+          <li><strong>STATUS:</strong> <span class="status-online"><i class="fa-solid fa-circle"></i> Active &amp; Exploring</span></li>
+        </ul>
+      </div>
+
+      <!-- Passions & Skill Tree Card -->
+      <div class="cyber-card tilt-card">
+        <div class="card-corner tl"></div><div class="card-corner tr"></div>
+        <div class="card-corner bl"></div><div class="card-corner br"></div>
+        <div class="card-header">
+          <i class="fa-solid fa-fire card-icon"></i>
+          <h3>SKILL TREE &amp; PASSIONS</h3>
+        </div>
+        <div class="passions-container">
+          <div class="passion-pill">
+            <i class="fa-solid fa-gamepad"></i>
+            <div>
+              <strong>GAMING</strong>
+              <p>FPS, Strategy &amp; Immersive Worlds</p>
             </div>
-        </div>
-    </section>
-
-    <!-- SOCIALS -->
-    <section class="reveal">
-        <div class="card" style="text-align: center;">
-            <h2>CONNECT WITH ME</h2>
-            <div class="social-links">
-                <a href="mailto:tanvirofficial105@gmail.com" class="hover-target"><i class="fas fa-envelope"></i> Email</a>
-                <a href="https://wa.me/8801770294074" class="hover-target"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-                <a href="https://www.tiktok.com/@fiso_amv" class="hover-target"><i class="fab fa-tiktok"></i> TikTok</a>
-                <a href="https://www.instagram.com/fiso_vincenzo" class="hover-target"><i class="fab fa-instagram"></i> Instagram</a>
+          </div>
+          <div class="passion-pill">
+            <i class="fa-solid fa-camera-retro"></i>
+            <div>
+              <strong>PHOTOGRAPHY</strong>
+              <p>Framing streets, shadows &amp; moods</p>
             </div>
+          </div>
+          <div class="passion-pill">
+            <i class="fa-solid fa-photo-film"></i>
+            <div>
+              <strong>CASUAL PHOTO &amp; VIDEO EDITING</strong>
+              <p>Color grading &amp; visual aesthetics</p>
+            </div>
+          </div>
+          <div class="passion-pill">
+            <i class="fa-solid fa-mobile-screen"></i>
+            <div>
+              <strong>MOBILE TECH ENTHUSIAST</strong>
+              <p>OS tweaks, hardware performance</p>
+            </div>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <footer>© 2026 TANVIR UL ISLAM | ALL RIGHTS RESERVED</footer>
+      <!-- Academic Quest Log Card -->
+      <div class="cyber-card tilt-card full-width-card">
+        <div class="card-corner tl"></div><div class="card-corner tr"></div>
+        <div class="card-corner bl"></div><div class="card-corner br"></div>
+        <div class="card-header">
+          <i class="fa-solid fa-graduation-cap card-icon"></i>
+          <h3>ACADEMIC QUEST TIMELINE</h3>
+        </div>
+        
+        <div class="timeline">
+          <!-- Timeline Item 1 -->
+          <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <span class="timeline-tag completed">STAGE 01 [COMPLETED]</span>
+              <h4>SSC (Secondary School Certificate)</h4>
+              <p class="timeline-sub"><i class="fa-solid fa-school"></i> High School Examination • <strong>Faridpur</strong></p>
+              <p class="timeline-desc">Graduation Year: 2024. Successfully built fundamental scientific aptitude, digital exploration, and academic baseline.</p>
+            </div>
+          </div>
+          
+          <!-- Timeline Item 2 -->
+          <div class="timeline-item">
+            <div class="timeline-marker active"></div>
+            <div class="timeline-content">
+              <span class="timeline-tag in-progress">STAGE 02 [IN PROGRESS]</span>
+              <h4>HSC (Higher Secondary Certificate)</h4>
+              <p class="timeline-sub"><i class="fa-solid fa-building-columns"></i> <strong>Dhaka Commerce College</strong> • Batch 2026</p>
+              <p class="timeline-desc">Currently advancing higher secondary education at DCC, sharpening analytical thinking while balancing tech passions.</p>
+            </div>
+          </div>
+        </div>
 
-    <script>
-        /* 1. PROFESSIONAL CURSOR */
-        const cursor = document.getElementById("cursor");
-        document.addEventListener("mousemove", (e) => {
-            cursor.style.left = e.clientX + "px";
-            cursor.style.top = e.clientY + "px";
-        });
+      </div>
 
-        document.querySelectorAll(".hover-target, a, .info-box").forEach(item => {
-            item.addEventListener("mouseenter", () => cursor.classList.add("cursor-hover"));
-            item.addEventListener("mouseleave", () => cursor.classList.remove("cursor-hover"));
-        });
+    </div>
+  </section>
 
-        /* 2. ADVANCED TYPING ANIMATION */
-        const words = ["PROFESSIONAL VIDEO EDITOR", "GAMING ENTHUSIAST", "CONTENT CREATOR", "FISO"];
-        let wordIdx = 0;
-        let charIdx = 0;
-        let isDeleting = false;
-        const typeTarget = document.getElementById("type");
+  <!-- ==================== TECH RIG & HARDWARE SHOWCASE ==================== -->
+  <section id="rig" class="section-container">
+    <div class="section-header">
+      <span class="sec-subtitle">// 02: ARMORY</span>
+      <h2 class="sec-title">HARDWARE &amp; BATTLESTATION</h2>
+      <div class="cyber-line"></div>
+    </div>
 
-        function typeLoop() {
-            const currentWord = words[wordIdx];
-            if (isDeleting) {
-                typeTarget.innerText = currentWord.substring(0, charIdx - 1);
-                charIdx--;
-            } else {
-                typeTarget.innerText = currentWord.substring(0, charIdx + 1);
-                charIdx++;
-            }
+    <!-- PC Build HUD Grid -->
+    <h3 class="subsection-title"><i class="fa-solid fa-desktop"></i> PC ARCHITECTURE</h3>
+    <div class="rig-grid">
+      
+      <div class="spec-card tilt-card">
+        <div class="spec-icon"><i class="fa-solid fa-microchip"></i></div>
+        <div class="spec-info">
+          <span class="spec-label">PROCESSOR (CPU)</span>
+          <h4 class="spec-value">AMD Ryzen 5 5500</h4>
+          <p class="spec-detail">6 Cores / 12 Threads • High-Efficiency Gaming Power</p>
+        </div>
+      </div>
 
-            let typeSpeed = isDeleting ? 50 : 100;
+      <div class="spec-card tilt-card">
+        <div class="spec-icon"><i class="fa-solid fa-tv"></i></div>
+        <div class="spec-info">
+          <span class="spec-label">GRAPHICS (GPU)</span>
+          <h4 class="spec-value">AMD Radeon RX 580</h4>
+          <p class="spec-detail">High Clock Speeds • Smooth 1080p Esports &amp; Media</p>
+        </div>
+      </div>
 
-            if (!isDeleting && charIdx === currentWord.length) {
-                typeSpeed = 2000;
-                isDeleting = true;
-            } else if (isDeleting && charIdx === 0) {
-                isDeleting = false;
-                wordIdx = (wordIdx + 1) % words.length;
-                typeSpeed = 500;
-            }
+      <div class="spec-card tilt-card">
+        <div class="spec-icon"><i class="fa-solid fa-memory"></i></div>
+        <div class="spec-info">
+          <span class="spec-label">MEMORY (RAM)</span>
+          <h4 class="spec-value">16 GB DDR4</h4>
+          <p class="spec-detail">3200 MHz High-Speed Dual Channel Execution</p>
+        </div>
+      </div>
 
-            setTimeout(typeLoop, typeSpeed);
-        }
-        typeLoop();
+      <div class="spec-card tilt-card">
+        <div class="spec-icon"><i class="fa-solid fa-hard-drive"></i></div>
+        <div class="spec-info">
+          <span class="spec-label">STORAGE POOL</span>
+          <h4 class="spec-value">700GB+ SSD/HDD</h4>
+          <p class="spec-detail">Rapid OS loading, media storage &amp; high-capacity gaming</p>
+        </div>
+      </div>
 
-        /* 3. INTERSECTION OBSERVER */
-        const observerOptions = { threshold: 0.2 };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add("active");
-            });
-        }, observerOptions);
+    </div>
 
-        document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+    <!-- Mobile Gear HUD Grid -->
+    <h3 class="subsection-title mt-4"><i class="fa-solid fa-mobile"></i> MOBILE GEAR DECK</h3>
+    <div class="mobile-grid">
+      
+      <div class="mobile-card tilt-card primary-device">
+        <div class="device-badge"><i class="fa-solid fa-crown"></i> PRIMARY GEAR</div>
+        <div class="device-icon-box">
+          <i class="fa-brands fa-apple"></i>
+        </div>
+        <h4 class="device-name">iPhone 12 Pro Max</h4>
+        <p class="device-spec">Super Retina XDR OLED • Triple Lens Pro Camera System for mobile photography &amp; 4K edits.</p>
+        <span class="device-status"><i class="fa-solid fa-signal"></i> Active Daily Driver</span>
+      </div>
 
-        /* 4. NEURAL NETWORK PARTICLES */
-        const canvas = document.getElementById("particleCanvas");
-        const ctx = canvas.getContext("2d");
-        let particles = [];
+      <div class="mobile-card tilt-card secondary-device">
+        <div class="device-badge secondary"><i class="fa-solid fa-shield"></i> BACKUP COMPANION</div>
+        <div class="device-icon-box">
+          <i class="fa-brands fa-apple"></i>
+        </div>
+        <h4 class="device-name">iPhone 11</h4>
+        <p class="device-spec">A13 Bionic Reliability • Dual Camera setup for mobile testing &amp; secondary communication.</p>
+        <span class="device-status"><i class="fa-solid fa-signal"></i> Operational Auxiliary</span>
+      </div>
 
-        function initParticles() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            particles = [];
-            const count = Math.floor(window.innerWidth / 15); 
-            for (let i = 0; i < count; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.8,
-                    vy: (Math.random() - 0.5) * 0.8,
-                    size: Math.random() * 2
-                });
-            }
-        }
+    </div>
+  </section>
 
-        function drawParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "rgba(0, 210, 255, 0.5)";
-            
-            for (let i = 0; i < particles.length; i++) {
-                let p = particles[i];
-                p.x += p.vx;
-                p.y += p.vy;
+  <!-- ==================== CONTACT & SOCIAL HUB ==================== -->
+  <section id="contact" class="section-container">
+    <div class="section-header">
+      <span class="sec-subtitle">// 03: TRANSMISSION</span>
+      <h2 class="sec-title">CONNECT WITH FISO</h2>
+      <div class="cyber-line"></div>
+    </div>
 
-                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+    <div class="contact-terminal">
+      <div class="terminal-banner">
+        <span class="term-dot red"></span>
+        <span class="term-dot yellow"></span>
+        <span class="term-dot green"></span>
+        <span class="term-title">COMMS_LINK_ENCRYPTED.SH</span>
+      </div>
+      <div class="terminal-body">
+        <p class="term-log">&gt; SECURE CHANNEL ESTABLISHED WITH <strong>TANVIRUL ISLAM (FISO)</strong></p>
+        <p class="term-log">&gt; SELECT A FREQUENCY BELOW TO DIRECTLY INITIATE TRANSMISSION:</p>
 
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fill();
+        <div class="social-links-grid">
+          
+          <!-- WhatsApp -->
+          <a href="https://wa.me/8801770294074" target="_blank" rel="noopener noreferrer" class="social-btn whatsapp-btn" data-sound="click">
+            <div class="btn-icon"><i class="fa-brands fa-whatsapp"></i></div>
+            <div class="btn-details">
+              <span class="social-name">WhatsApp</span>
+              <span class="social-meta">+880 1770-294074</span>
+            </div>
+            <i class="fa-solid fa-arrow-up-right-from-square external-icon"></i>
+          </a>
 
-                for (let j = i + 1; j < particles.length; j++) {
-                    let p2 = particles[j];
-                    let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-                    if (dist < 100) {
-                        ctx.strokeStyle = `rgba(0, 210, 255, ${1 - dist / 100})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(drawParticles);
-        }
+          <!-- Facebook -->
+          <a href="https://www.facebook.com/share/1F9ioS5Suw/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="social-btn fb-btn" data-sound="click">
+            <div class="btn-icon"><i class="fa-brands fa-facebook-f"></i></div>
+            <div class="btn-details">
+              <span class="social-name">Facebook</span>
+              <span class="social-meta">@Tanvirul Islam</span>
+            </div>
+            <i class="fa-solid fa-arrow-up-right-from-square external-icon"></i>
+          </a>
 
-        window.addEventListener("resize", initParticles);
-        initParticles();
-        drawParticles();
-    </script>
+          <!-- Instagram -->
+          <a href="https://www.instagram.com/07_fiso?stkn=eTV0aGI1ZWRmcGc5" target="_blank" rel="noopener noreferrer" class="social-btn insta-btn" data-sound="click">
+            <div class="btn-icon"><i class="fa-brands fa-instagram"></i></div>
+            <div class="btn-details">
+              <span class="social-name">Instagram</span>
+              <span class="social-meta">@07_fiso</span>
+            </div>
+            <i class="fa-solid fa-arrow-up-right-from-square external-icon"></i>
+          </a>
+
+          <!-- Email -->
+          <a href="mailto:tanvirofficial105@gmail.com" class="social-btn mail-btn" data-sound="click">
+            <div class="btn-icon"><i class="fa-solid fa-envelope"></i></div>
+            <div class="btn-details">
+              <span class="social-name">Email Link</span>
+              <span class="social-meta">tanvirofficial105@gmail.com</span>
+            </div>
+            <i class="fa-solid fa-arrow-up-right-from-square external-icon"></i>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cyberpunk Footer -->
+  <footer class="cyber-footer">
+    <div class="footer-content">
+      <p class="copyright">&copy; 2026 <strong>TANVIRUL ISLAM [FISO]</strong>. ALL RIGHTS RESERVED.</p>
+      <p class="footer-flavor">// POWERED BY CYBERNETIC ARCHITECTURE • DHAKA COMMERCE COLLEGE HSC BATCH 2026</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
